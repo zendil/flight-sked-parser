@@ -6,31 +6,37 @@ function parseFlights(item, flights) {
 	//console.log(item);
 	switch(item.text.trim()) {
 		case "":
-		break;
+			break;
 		case "LINE":
 		case "LIN":
-			flights.headers.line.startx = item.x
-		break;
+			flights.headers.line.startx = item.x;
+			break;
 		case "BRIEF":
-			flights.headers.brief.startx = item.x
-		break;
-			case "SCHD":
-			if(flights.headers.land.startx) flights.headers.duration.startx = item.x
-			else if(flights.headers.takeoff.startx) flights.headers.land.startx = item.x
-			else flights.headers.takeoff.startx = item.x
-		break;
+			flights.headers.brief.startx = item.x;
+			break;
+		case "SCHD":
+			if(flights.headers.land.startx) flights.headers.duration.startx = item.x;
+			else if(flights.headers.takeoff.startx) flights.headers.land.startx = item.x;
+			else flights.headers.takeoff.startx = item.x;
+			break;
+		case "LNCH":
+			flights.headers.launchicao.startx = item.x;
+			break;
+		case "LAND":
+			if(!flights.headers.landicao.startx) flights.headers.landicao.startx = item.x;
+			break;
 		case "INSTRUCTOR":
-			flights.headers.instructor.startx = item.x
-		break;
+			flights.headers.instructor.startx = item.x;
+			break;
 		case "STUDENT":
-			flights.headers.student.startx = item.x
-		break;
+			flights.headers.student.startx = item.x;
+			break;
 		case "TYPE":
-			flights.headers.event.startx = item.x
-		break;
+			flights.headers.event.startx = item.x;
+			break;
 		case "REMARKS":
-			flights.headers.notes.startx = item.x
-		break;
+			flights.headers.notes.startx = item.x;
+			break;
 		default:
 			if(!flights.headers.notes.startx) break;
 			if(item.text.match(/^T\d{2}/) != null && item.x <= flights.headers.line.startx) {
@@ -41,7 +47,7 @@ function parseFlights(item, flights) {
 			else if(flights.list.length === 0) break;
 			else {
 				for(let i = 0; i < flights.meta.allcols.length; i++) {
-					if(!flights.meta.cury) flights.meta.cury = item.y
+					if(!flights.meta.cury) flights.meta.cury = item.y;
 					if(!flights.meta.allcols[i+1] || item.x < flights.headers[flights.meta.allcols[i+1]].startx - flights.meta.tol) {
 						if(!flights.list[flights.list.length-1][flights.meta.allcols[i]]) flights.list[flights.list.length-1][flights.meta.allcols[i]] = "";
 						if(item.y > flights.meta.cury && flights.list[flights.list.length-1][flights.meta.allcols[i]] != "") {
@@ -56,7 +62,7 @@ function parseFlights(item, flights) {
 					}
 				}
 			}
-		break;
+			break;
 	}
 }
 
@@ -64,37 +70,37 @@ function parseSims(item, sims) {
 	//console.log(item);
 	switch(item.text.trim()) {
 		case "":
-		break;
+			break;
 		case "LINE":
-			sims.headers.line.startx = item.x
-		break;
+		case "LIN":
+			sims.headers.line.startx = item.x;
+			break;
 		case "BRIEF":
-			sims.headers.brief.startx = item.x
-		break;
+			sims.headers.brief.startx = item.x;
+			break;
 		case "SCHD":
-			sims.headers.takeoff.startx = item.x
-		break;
+			if(sims.headers.takeoff.startx) sims.headers.duration.startx = item.x;
+			else sims.headers.takeoff.startx = item.x;
+			break;
 		case "SIM/DEVICE":
-			sims.headers.device.startx = item.x
-		break;
+		case "SIM/":
+			sims.headers.device.startx = item.x;
+			break;
 		case "INSTRUCTOR":
-			sims.headers.instructor.startx = item.x
-		break;
+			sims.headers.instructor.startx = item.x;
+			break;
 		case "STUDENT":
-			sims.headers.student.startx = item.x
-		break;
+			sims.headers.student.startx = item.x;
+			break;
 		case "TYPE":
-			sims.headers.event.startx = item.x
-		break;
-		case "ACTUAL TIME":
-			sims.headers.duration.startx = item.x
-		break;
+			sims.headers.event.startx = item.x;
+			break;
 		case "REMARKS":
-			sims.headers.notes.startx = item.x
-		break;
+			sims.headers.notes.startx = item.x;
+			break;
 		default:
 			if(!sims.headers.notes.startx) break;
-			if(item.text.match(/^(L\dU\d|PTT\d{2})/) != null && item.x <= sims.headers.line.startx) {
+			if(item.text.match(/^(L\dU\d{1,2}(-\d{1,2})?|PTT\d{2})/) != null && item.x <= sims.headers.line.startx) {
 				//new event line
 				sims.list.push({line: item.text});
 				sims.meta.cury = item.y;
@@ -102,7 +108,7 @@ function parseSims(item, sims) {
 			else if(sims.list.length === 0) break;
 			else {
 				for(let i = 0; i < sims.meta.allcols.length; i++) {
-					if(!sims.meta.cury) sims.meta.cury = item.y
+					if(!sims.meta.cury) sims.meta.cury = item.y;
 					if(!sims.meta.allcols[i+1] || item.x < sims.headers[sims.meta.allcols[i+1]].startx - sims.meta.tol) {
 						//if(sims.meta.allcols[i] == "instructor" && item.x >= sims.headers[sims.meta.allcols[i+1]].startx) continue;
 						if(!sims.list[sims.list.length-1][sims.meta.allcols[i]]) sims.list[sims.list.length-1][sims.meta.allcols[i]] = "";
@@ -118,7 +124,7 @@ function parseSims(item, sims) {
 					}
 				}
 			}
-		break;
+			break;
 	}
 }
 
@@ -129,24 +135,26 @@ function parseGrounds(item, grounds) {
 		case "Meetings":
 		case "MIL":
 		case "Exam":
-		break;
+		case "Test":
+			break;
 		case "Time":
-			grounds.headers.time.startx = item.x
-		break;
+			grounds.headers.time.startx = item.x;
+			break;
 		case "Event":
-			grounds.headers.event.startx = item.x
-		break;
+			grounds.headers.event.startx = item.x;
+			break;
 		case "Location":
-			grounds.headers.location.startx = item.x
-		break;
+			grounds.headers.location.startx = item.x;
+			break;
+		case "Person":
+			grounds.headers.student.startx = item.x;
+			break;
 		case "Instructor":
-			grounds.headers.instructor.startx = item.x
-		break;
-		case "Student":
-			grounds.headers.student.startx = item.x
-		break;
+			grounds.headers.instructor.startx = item.x;
+			break;
 		case "Remarks":
-			grounds.headers.notes.startx = item.x
+			grounds.headers.notes.startx = item.x;
+			break;
 		default:
 			if(!grounds.headers.notes.startx) break;
 			if(item.text.match(/^\d{4}/) != null && item.x <= grounds.headers.time.startx) {
@@ -157,7 +165,7 @@ function parseGrounds(item, grounds) {
 			else if(grounds.list.length === 0) break;
 			else {
 				for(let i = 0; i < grounds.meta.allcols.length; i++) {
-					if(!grounds.meta.cury) grounds.meta.cury = item.y
+					if(!grounds.meta.cury) grounds.meta.cury = item.y;
 					if(!grounds.meta.allcols[i+1] || item.x < grounds.headers[grounds.meta.allcols[i+1]].startx - grounds.meta.tol) {
 						//if(grounds.meta.allcols[i] == "instructor" && item.x >= grounds.headers[grounds.meta.allcols[i+1]].startx) continue;
 						if(!grounds.list[grounds.list.length-1][grounds.meta.allcols[i]]) grounds.list[grounds.list.length-1][grounds.meta.allcols[i]] = "";
@@ -173,7 +181,7 @@ function parseGrounds(item, grounds) {
 					}
 				}
 			}
-		break;
+			break;
 	}
 }
 
@@ -182,7 +190,7 @@ function parseFile(buffer) {
 		let flights = {
 			meta: {
 				cury: undefined,
-				allcols : ["line", "brief", "takeoff", "land", "instructor", "student", "event", "duration", "notes"],
+				allcols : ["line", "brief", "takeoff", "land", "launchicao", "landicao", "instructor", "student", "event", "duration", "notes"],
 				tol: 0.2
 			},
 			headers: {
@@ -190,6 +198,8 @@ function parseFile(buffer) {
 				brief: {},
 				takeoff: {},
 				land: {},
+				launchicao: {},
+				landicao: {},
 				instructor: {},
 				student: {},
 				event: {},
@@ -202,7 +212,7 @@ function parseFile(buffer) {
 			meta: {
 				cury: undefined,
 				allcols : ["line", "brief", "takeoff", "device", "instructor", "student", "event", "duration", "notes"],
-				tol: 0.2
+				tol: 0.25
 			},
 			headers: {
 				line: {},
@@ -220,15 +230,15 @@ function parseFile(buffer) {
 		let grounds = {
 			meta: {
 				cury: undefined,
-				allcols : ["time", "event", "location", "instructor", "student", "notes"],
+				allcols : ["time", "event", "location", "student", "instructor", "notes"],
 				tol: 0.5
 			},
 			headers: {
 				time: {},
 				event: {},
 				location: {},
-				instructor: {},
 				student: {},
+				instructor: {},
 				notes: {},
 			},
 			list: []
@@ -254,11 +264,11 @@ function parseFile(buffer) {
 						e.event = e.event.split("\n");
 					});
 					sims.list.forEach((e) => {
-						e.student = e.student.split("\n");
-						e.event = e.event.split("\n");
+						if(e.student) e.student = e.student.split("\n");
+						if(e.event) e.event = e.event.split("\n");
 					});
 					grounds.list.forEach((e) => {
-						let ret = e.time.matchAll(/(?<start>\d{4})-(?<end>\d{4})/g).next().value
+						let ret = e.time.matchAll(/(?<start>\d{4})-(?<end>\d{4})/g).next().value;
 						//console.log(ret);
 						if(!ret) {
 							e.start = e.time.substr(0, 4);
@@ -290,9 +300,9 @@ function parseFile(buffer) {
 							}
 						});
 					});
-					console.log(flights);
-					console.log(sims);
-					console.log(grounds);
+					//console.log(flights);
+					//console.log(sims);
+					//console.log(grounds);
 					resolve({
 						flights: flights,
 						sims: sims,
@@ -307,7 +317,7 @@ function parseFile(buffer) {
 					onSims = false;
 					onGrounds = false;
 				}
-				else if(item.text.trim() == "Simulator (Sim Event)" || item.text.trim() == "Simulator (Sim Event) Schedule") {
+				else if(item.text.trim() == "Simulator" || item.text.trim() == "Simulator (Sim Event)" || item.text.trim() == "Simulator (Sim Event) Schedule") {
 					onFlights = false;
 					onSims = true;
 					onGrounds = false;
