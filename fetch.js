@@ -8,10 +8,10 @@ function fetchSked(date) {
 		//reject("fail");
 		const urlprefix = "https://www.cnatra.navy.mil/scheds/";
 		const urlwing = "TW5";
-		const urlsquadron = "SQ-TH-73A HITU";
+		const urlsquadron = "SQ-HT-8";
 		//const filedate = date.getFullYear().toString().padStart(2, "0")+"-"+(date.getMonth()+1).toString().padStart(2, "0")+"-"+(date.getDate()+0).toString().padStart(2, "0");
 		const filedate = date;
-		const filesquadron = "TH-73A HITU";
+		const filesquadron = "HT-8";
 		const filename = "Frontpage";
 
 		let url = new URL(urlprefix+urlwing+"/"+urlsquadron+"/"+"!"+filedate+"!"+filesquadron+"!"+filename+".pdf");
