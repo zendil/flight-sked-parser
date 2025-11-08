@@ -73,7 +73,7 @@ async function runDate(date) {
 			//console.log(sked.flights.list);
 			sked.flights.list.forEach((event) => {
 				let details = {};
-				if(event.instructor.indexOf(name) !== -1) {
+				if(event.instructor && event.instructor.indexOf(name) !== -1) {
 					details = {
 						summary: event.event.join(", "),
 						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -84,7 +84,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[0].indexOf(name) !== -1) {
+				else if(event.student[0] && event.student[0].indexOf(name) !== -1) {
 					details = {
 						summary: event.event[0],
 						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -137,7 +137,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[0].indexOf(name) !== -1) {
+				else if(event.student[0] && event.student[0].indexOf(name) !== -1) {
 					//console.log(event);
 					details = {
 						summary: event.event[0],
