@@ -74,10 +74,16 @@ async function runDate(date) {
 			sked.flights.list.forEach((event) => {
 				let details = {};
 				if(event.instructor && event.instructor.indexOf(name) !== -1) {
+					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
+					if(event.brief === null) event.brief = new Date(date+"T00:00:00"+tz);
+					else event.brief = new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
+					if(event.land === null) event.land = new Date(date+"T23:59:59"+tz);
+					else event.land = new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
+					if(event.event === null) event.event = "None"; //If null set to none
 					details = {
 						summary: event.event.join(", "),
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(date+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
+						start: event.brief,
+						end: event.land,
 						description: event.notes,
 					};
 					console.log("add event:");

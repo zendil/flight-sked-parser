@@ -47,16 +47,21 @@ function parseFlights(item, flights) {
 			else if(flights.list.length === 0) break;
 			else {
 				for(let i = 0; i < flights.meta.allcols.length; i++) {
-					if(!flights.meta.cury) flights.meta.cury = item.y;
+					//Loop through all columns
+					if(!flights.meta.cury) flights.meta.cury = item.y //If current y (row) is not set, use current
 					if(!flights.meta.allcols[i+1] || item.x < flights.headers[flights.meta.allcols[i+1]].startx - flights.meta.tol) {
-						if(!flights.list[flights.list.length-1][flights.meta.allcols[i]]) flights.list[flights.list.length-1][flights.meta.allcols[i]] = "";
+						//if we have not set next column OR current item x (col) is less than next column x
+						if(!flights.list[flights.list.length-1][flights.meta.allcols[i]]) flights.list[flights.list.length-1][flights.meta.allcols[i]] = ""; //If column is undefined set to empty string
 						if(item.y > flights.meta.cury && flights.list[flights.list.length-1][flights.meta.allcols[i]] != "") {
+							//If we went to a new line, add \n and reset cury
 							flights.list[flights.list.length-1][flights.meta.allcols[i]] = flights.list[flights.list.length-1][flights.meta.allcols[i]]+"\n";
 							flights.meta.cury = item.y;
 						}
 						else {
+							//Otherwise cury is our item's y'
 							flights.meta.cury = item.y;
 						}
+						//Set the value of this column to the text of this column
 						flights.list[flights.list.length-1][flights.meta.allcols[i]] = flights.list[flights.list.length-1][flights.meta.allcols[i]]+item.text.trim();
 						break;
 					}
