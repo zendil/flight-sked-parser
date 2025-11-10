@@ -17,3 +17,9 @@ services:
     # ports:
       # - 3000:3000
     container_name: sked-parser
+    secrets:
+      - credentials
+
+secrets:
+  credentials:
+    file: ./credentials.json
