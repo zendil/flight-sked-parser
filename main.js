@@ -47,7 +47,7 @@ function setNextRun() {
 	if(fetched[formatednext] === true) {
 		//already got this day
 		console.log("date "+formatednext+" already fetched");
-		goaltime = Math.ceil(curtime / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (tzval * 60 * 60 * 1000);
+		goaltime = Math.ceil(curtime / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (-1 * tzval * 60 * 60 * 1000);
 	}
 	let timer = goaltime - Date.now();
 	let goalstring = new Date(goaltime).toISOString();
