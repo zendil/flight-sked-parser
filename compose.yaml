@@ -16,9 +16,10 @@ services:
     # ports:
       # - 3000:3000
     container_name: sked-parser
+    restart: unless-stopped
     # Because portainer doesn't do secrets...
     volumes:
-      - /opt/sked-parser/credentials.json:/run/secrets/credentials
+      - /opt/sked-parser/credentials.json:/run/secrets/credentials:ro
     
 #    secrets:
 #      - credentials
