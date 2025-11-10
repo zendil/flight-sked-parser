@@ -7,7 +7,7 @@ const SCOPES = [
 	"https://www.googleapis.com/auth/calendar.calendarlist.readonly",
 	"https://www.googleapis.com/auth/calendar.calendars.readonly",
 ];
-const CREDENTIALS_PATH = "credentials.json";
+const CREDENTIALS_PATH = process.env.NODE_CREDENTIALS_PATH || "credentials.json";
 
 async function authorize() {
 	client = await new google.auth.GoogleAuth({
