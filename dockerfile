@@ -23,7 +23,7 @@ ENV NODE_CREDENTIALS_PATH=/run/secrets/credentials
 RUN --mount=type=bind,source=package.json,target=/usr/src/app/package.json \
     --mount=type=bind,source=package-lock.json,target=/usr/src/app/package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev /usr/src/app/
+    npm ci --omit=dev --prefix /usr/src/app
 
 # Copy the rest of the source files into the image.
 COPY --chmod=755 . /usr/src/app/.
