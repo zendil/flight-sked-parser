@@ -9,17 +9,20 @@
 # https://github.com/docker/awesome-compose
 services:
   sked-parser:
-    build:
-      context: .
+    image: zendil/flight-sked-parser:latest
     environment:
       NODE_ENV: production
       TZ: America/Chicago
     # ports:
       # - 3000:3000
     container_name: sked-parser
-    secrets:
-      - credentials
-
-secrets:
-  credentials:
-    file: ./credentials.json
+    # Because portainer doesn't do secrets...
+    volumes:
+      - /opt/sked-parser/credentials.json:/run/secrets/credentials
+    
+#    secrets:
+#      - credentials
+#
+#secrets:
+#  credentials:
+#    file: ./credentials.json
