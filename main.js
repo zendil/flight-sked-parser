@@ -21,7 +21,8 @@ else tz = "Z";
 
 let fetched = {};
 
-let firstday = new Date(Date.now() + 24 * 60 * 60 * 1000);
+//let firstday = new Date(Date.now() + 24 * 60 * 60 * 1000);
+let firstday = new Date(Date.now());
 while(firstday.getDay() == 0 || firstday.getDay() == 6) {
 	//Sun and Sat
 	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
@@ -75,7 +76,7 @@ function setNextRun() {
 	let goalstring = new Date(goaltime).toISOString();
 	console.log("set next run for "+goalstring+" -- "+((goaltime - Date.now()) / 1000)+" secs remaining");
 	setTimeout(() => {
-		runDate(formatednext);
+		runDate(formatednext || today);
 	}, timer);
 }
 
