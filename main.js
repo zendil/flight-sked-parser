@@ -199,12 +199,24 @@ async function runDate(date) {
 			});
 			fetched[date] = true;
 			//console.log("fetched "+date+" true");
-			setNextRun();
+			
+			//try the next day too
+			let nextday = new Date(Date.parse(date) - (tzval * 60 * 60 * 1000) + 24 * 60 * 60 * 1000);
+			while(nextday.getDay() == 0 || nextday.getDay() == 6) {
+				//Sun and Sat
+				nextday = new Date(nextday.valueOf() + 24 * 60 * 60 * 1000);
+			}
+			let formatednext = nextday.getFullYear().toString().padStart(2, "0")+"-"+(nextday.getMonth()+1).toString().padStart(2, "0")+"-"+(nextday.getDate()+0).toString().padStart(2, "0");
+			console.log("checking next day ("+formatednext+")");
+			runDate(formatednext);
+				
+			//setNextRun();
 		});
 	}).catch((e) => {
 		fetched[date] = false;
 		//console.log("fetched "+date+" false");
 		console.log("ERROR: "+e);
+		//console.log(fetched);
 		setNextRun();
 	});
 }
