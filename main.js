@@ -27,31 +27,53 @@ while(firstday.getDay() == 0 || firstday.getDay() == 6) {
 	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
 }
 let firstdate = firstday.getFullYear().toString().padStart(2, "0")+"-"+(firstday.getMonth()+1).toString().padStart(2, "0")+"-"+(firstday.getDate()+0).toString().padStart(2, "0");
-//firstdate = "2025-08-14";
+//firstdate = "2025-11-12";
+//fetched["2025-11-11"] = true;
 
 runDate(firstdate);
 
 function setNextRun() {
-	let curtime = Date.now();
-	let goaltime = Math.ceil(curtime / (30 * 60 * 1000)) * (30 * 60 * 1000);
-	//let goaltime = Math.ceil(curtime / (10 * 1000)) * (10 * 1000); //10 secs for test
-	//console.log(curtime, goaltime);
-	let nextday = new Date(curtime + 24 * 60 * 60 * 1000);
-	while(nextday.getDay() == 0 || nextday.getDay() == 6) {
-		//Sun and Sat
-		nextday = new Date(nextday.valueOf() + 24 * 60 * 60 * 1000);
+	let today = new Date((Date.now() - (tzval * 60 * 60 * 1000)));
+	today = today.getFullYear().toString().padStart(2, "0")+"-"+(today.getMonth()+1).toString().padStart(2, "0")+"-"+(today.getDate()+0).toString().padStart(2, "0");
+	//today = "2025-11-11";
+	let goaltime;
+	if(!fetched[today] || fetched[today] === false) {
+		goaltime = Math.ceil(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000);
 	}
-	let formatednext = nextday.getFullYear().toString().padStart(2, "0")+"-"+(nextday.getMonth()+1).toString().padStart(2, "0")+"-"+(nextday.getDate()+0).toString().padStart(2, "0");
-	//console.log(formatednext);
-	//console.log(fetched);
-	if(fetched[formatednext] === true) {
-		//already got this day
-		console.log("date "+formatednext+" already fetched");
-		goaltime = Math.ceil((curtime - (tzval * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (-1 * tzval * 60 * 60 * 1000);
+	else {
+		//let goaltime = Math.ceil(curtime / (10 * 1000)) * (10 * 1000); //10 secs for test
+		//console.log(curtime, goaltime);
+		let nextday = new Date(Date.now() + 24 * 60 * 60 * 1000);
+		while(nextday.getDay() == 0 || nextday.getDay() == 6) {
+			//Sun and Sat
+			nextday = new Date(nextday.valueOf() + 24 * 60 * 60 * 1000);
+		}
+		let formatednext = nextday.getFullYear().toString().padStart(2, "0")+"-"+(nextday.getMonth()+1).toString().padStart(2, "0")+"-"+(nextday.getDate()+0).toString().padStart(2, "0");
+		//console.log("next1:"+formatednext);
+		while(fetched[formatednext] && fetched[formatednext] === true) {
+			//console.log("nextcheck:"+formatednext+":true");
+			nextday = new Date((Date.parse(formatednext) - (tzval * 60 * 60 * 1000)) + 24 * 60 * 60 * 1000);
+			while(nextday.getDay() == 0 || nextday.getDay() == 6) {
+				//Sun and Sat
+				nextday = new Date(nextday.valueOf() + 24 * 60 * 60 * 1000);
+			}
+			formatednext = nextday.getFullYear().toString().padStart(2, "0")+"-"+(nextday.getMonth()+1).toString().padStart(2, "0")+"-"+(nextday.getDate()+0).toString().padStart(2, "0");
+			//console.log("next2:"+formatednext);
+			goaltime = Math.ceil((Date.parse(formatednext) - (tzval * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (-1 * tzval * 60 * 60 * 1000);
+		}
+		goaltime = goaltime - 24 * 60 * 60 * 1000;
+		//console.log("nextcheck:"+formatednext+":false");
+		//console.log(formatednext);
+		//console.log(fetched);
+		//if(fetched[formatednext] === true) {
+		//	//already got this day
+		//	console.log("date "+formatednext+" already fetched");
+		//	goaltime = Math.ceil((Date.parse(formatednext) - (tzval * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (-1 * tzval * 60 * 60 * 1000);
+		//}
 	}
 	let timer = goaltime - Date.now();
 	let goalstring = new Date(goaltime).toISOString();
-	console.log("set next run for "+goalstring+" -- "+((goaltime - curtime) / 1000)+" secs remaining");
+	console.log("set next run for "+goalstring+" -- "+((goaltime - Date.now()) / 1000)+" secs remaining");
 	setTimeout(() => {
 		runDate(formatednext);
 	}, timer);
