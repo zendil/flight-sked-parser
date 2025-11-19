@@ -35,13 +35,25 @@ runDate(firstdate);
 
 function setNextRun() {
 	let today = new Date((Date.now() - (tzval * 60 * 60 * 1000)));
+	let tomorrow = new Date((Date.now() + (24 * 60 * 60 * 1000) - (tzval * 60 * 60 * 1000)));
 	today = today.getFullYear().toString().padStart(2, "0")+"-"+(today.getMonth()+1).toString().padStart(2, "0")+"-"+(today.getDate()+0).toString().padStart(2, "0");
+	tomorrow = tomorrow.getFullYear().toString().padStart(2, "0")+"-"+(tomorrow.getMonth()+1).toString().padStart(2, "0")+"-"+(tomorrow.getDate()+0).toString().padStart(2, "0");
 	//today = "2025-11-11";
+	//tomorrow = "2025-11-12";
 	let goaltime;
+	//console.log(fetched);
 	if(!fetched[today] || fetched[today] === false) {
+		//Need todays schedule
 		goaltime = Math.ceil(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000);
+		//console.log("goal1:"+goaltime);
+	}
+	else if(!fetched[tomorrow] || fetched[tomorrow] === false) {
+		//Need tomorrows schedule
+		goaltime = Math.ceil(Date.now() / (30 * 60 * 1000)) * (30 * 60 * 1000);
+		//console.log("goal2:"+goaltime);
 	}
 	else {
+		//Need a future (not today or tomorrow) schedule
 		//let goaltime = Math.ceil(curtime / (10 * 1000)) * (10 * 1000); //10 secs for test
 		//console.log(curtime, goaltime);
 		let nextday = new Date(Date.now() + 24 * 60 * 60 * 1000);
@@ -61,8 +73,10 @@ function setNextRun() {
 			formatednext = nextday.getFullYear().toString().padStart(2, "0")+"-"+(nextday.getMonth()+1).toString().padStart(2, "0")+"-"+(nextday.getDate()+0).toString().padStart(2, "0");
 			//console.log("next2:"+formatednext);
 			goaltime = Math.ceil((Date.parse(formatednext) - (tzval * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (-1 * tzval * 60 * 60 * 1000);
+			//console.log("goal3:"+goaltime);
 		}
 		goaltime = goaltime - 24 * 60 * 60 * 1000;
+		//console.log("goal4:"+goaltime);
 		//console.log("nextcheck:"+formatednext+":false");
 		//console.log(formatednext);
 		//console.log(fetched);
@@ -72,6 +86,7 @@ function setNextRun() {
 		//	goaltime = Math.ceil((Date.parse(formatednext) - (tzval * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) - (-1 * tzval * 60 * 60 * 1000);
 		//}
 	}
+	//console.log("goal end:"+goaltime);
 	let timer = goaltime - Date.now();
 	let goalstring = new Date(goaltime).toISOString();
 	console.log("set next run for "+goalstring+" -- "+((goaltime - Date.now()) / 1000)+" secs remaining");
