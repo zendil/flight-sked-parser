@@ -165,7 +165,8 @@ async function runDate(date) {
 			
 			//console.log(sked.sims.list);
 			sked.sims.list.forEach((event) => {
-				if(event.device.substr(0, 3) == "PTT") event.notes = "PTT\n"+event.notes;
+				//console.log(event);
+				if(event.device !== null && event.line !== null && (event.device.substr(0, 3) == "PTT" || event.line.substr(0,3) == "PTT")) event.notes = "PTT\n"+event.notes;
 				if(!event.instructor) event.instructor = "TBD";
 				if(!event.notes) event.notes = "";
 				if(event.brief == "TBD") event.brief = event.takeoff;
