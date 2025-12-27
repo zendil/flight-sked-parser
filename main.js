@@ -28,7 +28,7 @@ while(firstday.getDay() == 0 || firstday.getDay() == 6) {
 	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
 }
 let firstdate = firstday.getFullYear().toString().padStart(2, "0")+"-"+(firstday.getMonth()+1).toString().padStart(2, "0")+"-"+(firstday.getDate()+0).toString().padStart(2, "0");
-//firstdate = "2025-11-12";
+//firstdate = "2025-12-02";
 //fetched["2025-11-11"] = true;
 
 runDate(firstdate);
@@ -112,11 +112,12 @@ async function runDate(date) {
 			sked.flights.list.forEach((event) => {
 				let details = {};
 				if(event.instructor && event.instructor.indexOf(name) !== -1) {
+					console.log("brief:"+event.brief);
 					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
 					if(event.brief === null) event.brief = new Date(date+"T00:00:00"+tz);
 					else event.brief = new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
 					if(event.land === null) event.land = new Date(date+"T23:59:59"+tz);
-					else event.land = new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
+					else event.land = new Date(date+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz);
 					if(event.event === null) event.event = "None"; //If null set to none
 					details = {
 						summary: event.event.join(", "),
