@@ -21,12 +21,11 @@ else tz = "Z";
 
 let fetched = {};
 
-//let firstday = new Date(Date.now() + 24 * 60 * 60 * 1000);
-let firstday = new Date(Date.now());
-while(firstday.getDay() == 0 || firstday.getDay() == 6) {
-	//Sun and Sat
-	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
-}
+let firstday = new Date(Date.now() + 24 * 60 * 60 * 1000);
+//while(firstday.getDay() == 0 || firstday.getDay() == 6) {
+//	//Sun and Sat
+//	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
+//}
 let firstdate = firstday.getFullYear().toString().padStart(2, "0")+"-"+(firstday.getMonth()+1).toString().padStart(2, "0")+"-"+(firstday.getDate()+0).toString().padStart(2, "0");
 //firstdate = "2025-12-02";
 //fetched["2025-11-11"] = true;
