@@ -105,8 +105,10 @@ function setNextRun() {
 // return false;
 
 async function runDate(date) {
-	console.log("fetching date "+date);
-	fetchSked(date).then((pdfBuffer) => {
+	//format date object as YYYY-MM-DD
+	let formatDate = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2, "0")+"-"+(date.getDate()+0).toString().padStart(2, "0");
+	console.log("fetching date "+formatDate);
+	fetchSked(formatDate).then((pdfBuffer) => {
 		parseFile(pdfBuffer).then((sked) => {
 			//console.log(sked.flights.list);
 			sked.flights.list.forEach((event) => {
@@ -114,10 +116,10 @@ async function runDate(date) {
 				if(event.instructor && event.instructor.indexOf(name) !== -1) {
 					console.log("brief:"+event.brief);
 					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
-					if(event.brief === null) event.brief = new Date(date+"T00:00:00"+tz);
-					else event.brief = new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
-					if(event.land === null) event.land = new Date(date+"T23:59:59"+tz);
-					else event.land = new Date(date+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz);
+					if(event.brief === null) event.brief = new Date(formatDate+"T00:00:00"+tz);
+					else event.brief = new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
+					if(event.land === null) event.land = new Date(formatDate+"T23:59:59"+tz);
+					else event.land = new Date(formatDate+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz);
 					if(event.event === null) event.event = "None"; //If null set to none
 					details = {
 						summary: event.event.join(", "),
@@ -132,8 +134,8 @@ async function runDate(date) {
 				else if(event.student[0] && event.student[0].indexOf(name) !== -1) {
 					details = {
 						summary: event.event[0],
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(date+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(formatDate+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
 						description: "IP "+event.instructor+"\n"+event.notes,
 					};
 					console.log("add event:");
@@ -143,8 +145,8 @@ async function runDate(date) {
 				else if(event.student[1] && event.student[1].indexOf(name) !== -1) {
 					details = {
 						summary: event.event[1],
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(date+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(formatDate+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
 						description: "IP "+event.instructor+"\n"+event.notes,
 					};
 					console.log("add event:");
@@ -154,8 +156,8 @@ async function runDate(date) {
 				else if(event.student[2] && event.student[2].indexOf(name) !== -1) {
 					details = {
 						summary: event.event[2],
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(date+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(formatDate+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz),
 						description: "IP "+event.instructor+"\n"+event.notes,
 					};
 					console.log("add event:");
@@ -175,8 +177,8 @@ async function runDate(date) {
 				if(event.instructor && event.instructor.indexOf(name) !== -1) {
 					details = {
 						summary: event.event.join(", "),
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(new Date(date+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: event.notes,
 					};
 					console.log("add event:");
@@ -187,8 +189,8 @@ async function runDate(date) {
 					//console.log(event);
 					details = {
 						summary: event.event[0],
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(new Date(date+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: "IP "+event.instructor+"\n"+event.notes,
 					};
 					console.log("add event:");
@@ -198,8 +200,8 @@ async function runDate(date) {
 				else if(event.student[1] && event.student[1].indexOf(name) !== -1) {
 					details = {
 						summary: event.event[1],
-						start: new Date(date+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
-						end: new Date(new Date(date+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: "IP "+event.instructor+"\n"+event.notes,
 					};
 					console.log("add event:");
@@ -216,8 +218,8 @@ async function runDate(date) {
 				if(event.instructor && event.instructor.indexOf(name) !== -1) {
 					details = {
 						summary: event.event,
-						start: new Date(date+"T"+event.time.substr(0,2)+":"+event.time.substr(2,2)+":00"+tz),
-						end: new Date(date+"T"+event.time.substr(4,2)+":"+event.time.substr(6,2)+":00"+tz),
+						start: new Date(formatDate+"T"+event.time.substr(0,2)+":"+event.time.substr(2,2)+":00"+tz),
+						end: new Date(formatDate+"T"+event.time.substr(4,2)+":"+event.time.substr(6,2)+":00"+tz),
 						description: event.notes,
 					};
 					console.log("add event:");
@@ -228,8 +230,8 @@ async function runDate(date) {
 					//console.log(event);
 					details = {
 						summary: event.event,
-						start: new Date(date+"T"+event.time.substr(0,2)+":"+event.time.substr(2,2)+":00"+tz),
-						end: new Date(date+"T"+event.time.substr(5,2)+":"+event.time.substr(7,2)+":00"+tz),
+						start: new Date(formatDate+"T"+event.time.substr(0,2)+":"+event.time.substr(2,2)+":00"+tz),
+						end: new Date(formatDate+"T"+event.time.substr(5,2)+":"+event.time.substr(7,2)+":00"+tz),
 						description: "Instructor "+event.instructor+"\n"+event.notes,
 					};
 					console.log("add event:");
@@ -237,8 +239,8 @@ async function runDate(date) {
 					addEvent(auth, details);
 				}
 			});
-			fetched[date] = true;
-			//console.log("fetched "+date+" true");
+			fetched[formatDate] = true;
+			//console.log("fetched "+formatDate+" true");
 			
 			//try the next day too
 			let nextday = new Date(Date.parse(date) - (tzval * 60 * 60 * 1000) + 24 * 60 * 60 * 1000);
@@ -253,10 +255,9 @@ async function runDate(date) {
 			//setNextRun();
 		});
 	}).catch((e) => {
-		fetched[date] = false;
-		//console.log("fetched "+date+" false");
+		fetched[formatDate] = false;
+		//console.log("fetched "+formatDate+" false");
 		console.log("ERROR: "+e);
-		//console.log(fetched);
 		setNextRun();
 	});
 }
