@@ -250,14 +250,13 @@ async function runDate(date) {
 			let formatednext = nextday.getFullYear().toString().padStart(2, "0")+"-"+(nextday.getMonth()+1).toString().padStart(2, "0")+"-"+(nextday.getDate()+0).toString().padStart(2, "0");
 			console.log("checking next day ("+formatednext+")");
 			runDate(formatednext);
-				
-			//setNextRun();
+			setNextRun(true, date);
 		});
 	}).catch((e) => {
 		fetched[formatDate] = false;
 		//console.log("fetched "+formatDate+" false");
 		console.log("ERROR: "+e);
-		setNextRun();
+		setNextRun(false, date);
 	});
 }
 
