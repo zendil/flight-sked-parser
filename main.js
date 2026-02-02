@@ -86,7 +86,7 @@ async function runDate(date) {
 			sked.flights.list.forEach((event) => {
 				let details = {};
 				if(event.instructor && event.instructor.indexOf(name) !== -1) {
-					console.log("brief:"+event.brief);
+					//console.log("brief:"+event.brief);
 					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
 					if(event.brief === null) event.brief = new Date(formatDate+"T00:00:00"+tz);
 					else event.brief = new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
