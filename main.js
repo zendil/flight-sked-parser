@@ -56,6 +56,13 @@ function setNextRun(success, date) {
 		}
 		else {
 			//if the date we are trying to fetch is further in the future, wait until tomorrow afternoon to try again
+			//UNLESS it is (assumed) the weekend and we need sat/sun/mon - then we keep trying
+			if([6, 0, 1].includes(date.getDay())) {
+				let goaltime = Math.ceil(curtime / (30 * 60 * 1000)) * (30 * 60 * 1000); //next xx:30
+			}
+			else {
+				let goaltime = Math.ceil(curtime / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) + (12 * 60 * 60 * 1000) - (tzval * 60 * 60 * 1000); //tomorrow 12:00 (in local time zone)
+			}
 			let goaltime = Math.ceil(curtime / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) + (12 * 60 * 60 * 1000) - (tzval * 60 * 60 * 1000); //tomorrow 12:00 (in local time zone)
 			let timer = goaltime - Date.now();
 			let goalstring = new Date(goaltime).toISOString();
