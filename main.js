@@ -47,12 +47,6 @@ function setNextRun(success, date) {
 			let goaltime = Math.ceil(curtime / (30 * 60 * 1000)) * (30 * 60 * 1000); //next xx:30
 			//let goaltime = Math.ceil(curtime / (10 * 1000)) * (10 * 1000); //10 secs for test
 			//console.log(curtime, goaltime);
-			let timer = goaltime - Date.now();
-			let goalstring = new Date(goaltime).toISOString();
-			console.log("set next run for "+goalstring+" -- "+((goaltime - curtime) / 1000)+" secs remaining");
-			setTimeout(() => {
-				runDate(date);
-			}, timer);
 		}
 		else {
 			//if the date we are trying to fetch is further in the future, wait until tomorrow afternoon to try again
@@ -63,14 +57,13 @@ function setNextRun(success, date) {
 			else {
 				let goaltime = Math.ceil(curtime / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) + (12 * 60 * 60 * 1000) - (tzval * 60 * 60 * 1000); //tomorrow 12:00 (in local time zone)
 			}
-			let goaltime = Math.ceil(curtime / (24 * 60 * 60 * 1000)) * (24 * 60 * 60 * 1000) + (12 * 60 * 60 * 1000) - (tzval * 60 * 60 * 1000); //tomorrow 12:00 (in local time zone)
-			let timer = goaltime - Date.now();
-			let goalstring = new Date(goaltime).toISOString();
-			console.log("set next run for "+goalstring+" -- "+((goaltime - curtime) / 1000)+" secs remaining");
-			setTimeout(() => {
-				runDate(date);
-			}, timer);
 		}
+		let timer = goaltime - Date.now();
+		let goalstring = new Date(goaltime).toISOString();
+		console.log("set next run for "+goalstring+" -- "+((goaltime - curtime) / 1000)+" secs remaining");
+		setTimeout(() => {
+			runDate(date);
+		}, timer);
 	}
 }
 
