@@ -48,7 +48,7 @@ function parseFlights(item, flights) {
 			else {
 				for(let i = 0; i < flights.meta.allcols.length; i++) {
 					//Loop through all columns
-					if(!flights.meta.cury) flights.meta.cury = item.y //If current y (row) is not set, use current
+					if(!flights.meta.cury) flights.meta.cury = item.y; //If current y (row) is not set, use current
 					if(!flights.meta.allcols[i+1] || item.x < flights.headers[flights.meta.allcols[i+1]].startx - flights.meta.tol) {
 						//if we have not set next column OR current item x (col) is less than next column x
 						if(!flights.list[flights.list.length-1][flights.meta.allcols[i]]) flights.list[flights.list.length-1][flights.meta.allcols[i]] = ""; //If column is undefined set to empty string
@@ -266,6 +266,7 @@ function parseFile(buffer) {
 					//console.log(grounds);
 					flights.list.forEach((e) => {
 						e.student = e.student.split("\n");
+						e.event = e.event.replace(",", "");
 						e.event = e.event.split("\n");
 					});
 					sims.list.forEach((e) => {
@@ -352,7 +353,7 @@ function parseFile(buffer) {
 			});
 		}
 		catch (e) {
-			console.log("PDF Error");
+			console.log("PDF Error: "+e);
 		}
 	});
 }
