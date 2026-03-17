@@ -23,6 +23,8 @@ RUN --mount=type=bind,source=package.json,target=/usr/src/app/package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev --prefix /usr/src/app
 
+RUN apk update && apk add qpdf
+
 # Copy the rest of the source files into the image.
 COPY --chmod=755 . /usr/src/app/.
 

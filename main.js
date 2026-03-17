@@ -1,4 +1,5 @@
 const fs = require("node:fs");
+const childProcess = require('node:child_process');
 const parseFile = require("./parse.js");
 const addEvent = require("./calendar.js");
 const fetchSked = require("./fetch.js");
@@ -95,7 +96,10 @@ async function runDate(date) {
 	let formatDate = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2, "0")+"-"+(date.getDate()+0).toString().padStart(2, "0");
 	console.log("fetching date "+formatDate);
 	fetchSked(formatDate).then((pdfBuffer) => {
-		parseFile(pdfBuffer).then((sked) => {
+		//send pdf to qpdf for repair just in case
+		let checkedPDF = qpdf(pdfBuffer);
+		//console.log(checkedPDF);
+		parseFile(checkedPDF).then((sked) => {
 			//console.log(sked.flights.list);
 			sked.flights.list.forEach((event) => {
 				let details = {};
@@ -249,4 +253,34 @@ function tzDate(datetime, timezoneName) {
 	date.setTime(date.getTime() + offset);
 
 	return date;
+}
+
+function qpdf(inbuffer) {
+	try {
+		fs.mkdirSync("tmp");
+	}
+	catch (e) {
+		console.error("error creating tmp dir, continuing");
+	}
+	let infile = fs.openSync("tmp/in.pdf", "w");
+	fs.writeSync(infile, inbuffer);
+	fs.closeSync(infile);
+	try {
+		childProcess.execSync("qpdf tmp/in.pdf tmp/out.pdf");
+	}
+	catch (e) {
+		console.error("qpdf: "+e);
+		console.error("errors in qpdf, continuing")
+	}
+	let outbuffer = fs.readFileSync("tmp/out.pdf");
+	fs.unlinkSync("tmp/in.pdf");
+	fs.unlinkSync("tmp/out.pdf");
+	fs.rmdirSync("tmp");
+	if(Buffer.isBuffer(outbuffer)) {
+		return outbuffer;
+	}
+	else {
+		console.error("qpdf errror, returning original input");
+		return inbuffer;
+	}
 }
