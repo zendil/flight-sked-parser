@@ -12,16 +12,7 @@ let auth = false;
 let name = "LT PETERSON E";
 
 //LOCAL MACHINE TIME MUST BE IN TIME ZONE OF THE SCHEDULE (America/Chicago)
-let tzval = Math.round(new Date().getTimezoneOffset() / 60 * -1);
-let tz;
-if(tzval > 0) {
-	tz = "+"+tzval.toString().padStart(2, "0")+":00";
-}
-else if(tzval < 0) {
-	tz = "-"+Math.abs(tzval).toString().padStart(2, "0")+":00";
-}
-else tz = "Z";
-//console.log(tz);
+let tzval, tz;
 
 let fetched = {};
 
@@ -82,6 +73,24 @@ function setNextRun(success, date) {
 // return false;
 
 async function runDate(date) {
+	//LOCAL MACHINE TIME MUST BE IN TIME ZONE OF THE SCHEDULE (America/Chicago)
+	//tzval is checked every day in order to account for daylight savings
+	tzval = Math.round(date.getTimezoneOffset() / 60 * -1);
+	if(tzval > 0) {
+		tz = "+"+tzval.toString().padStart(2, "0")+":00";
+	}
+	else if(tzval < 0) {
+		tz = "-"+Math.abs(tzval).toString().padStart(2, "0")+":00";
+	}
+	else tz = "Z";
+	//console.log(tz);
+	
+	//check that date is still in the future so we don't get stuck on past dates if they were never posted
+	if(Math.floor(date / (24 * 60 * 60 * 1000)) < Math.floor(new Date() / (24 * 60 * 60 * 1000))) {
+		let formatDate = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2, "0")+"-"+(date.getDate()+0).toString().padStart(2, "0");
+		console.log("skipping stale date of "+formatDate);
+		date = new Date();
+	}
 	//format date object as YYYY-MM-DD
 	let formatDate = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2, "0")+"-"+(date.getDate()+0).toString().padStart(2, "0");
 	console.log("fetching date "+formatDate);
