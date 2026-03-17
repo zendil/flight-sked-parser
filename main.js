@@ -256,12 +256,6 @@ function tzDate(datetime, timezoneName) {
 }
 
 function qpdf(inbuffer) {
-	try {
-		fs.mkdirSync("tmp");
-	}
-	catch (e) {
-		console.error("error creating tmp dir, continuing");
-	}
 	let infile = fs.openSync("tmp/in.pdf", "w");
 	fs.writeSync(infile, inbuffer);
 	fs.closeSync(infile);
@@ -270,12 +264,11 @@ function qpdf(inbuffer) {
 	}
 	catch (e) {
 		console.error("qpdf: "+e);
-		console.error("errors in qpdf, continuing")
+		console.error("errors in qpdf, continuing");
 	}
 	let outbuffer = fs.readFileSync("tmp/out.pdf");
 	fs.unlinkSync("tmp/in.pdf");
 	fs.unlinkSync("tmp/out.pdf");
-	fs.rmdirSync("tmp");
 	if(Buffer.isBuffer(outbuffer)) {
 		return outbuffer;
 	}

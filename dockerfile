@@ -28,6 +28,9 @@ RUN apk update && apk add qpdf
 # Copy the rest of the source files into the image.
 COPY --chmod=755 . /usr/src/app/.
 
+RUN mkdir -p /usr/src/app/tmp
+RUN chown /usr/src/app/tmp node:node
+
 # Expose the port that the application listens on.
 #EXPOSE 3000
 
