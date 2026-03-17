@@ -3,6 +3,10 @@ const parseFile = require("./parse.js");
 const addEvent = require("./calendar.js");
 const fetchSked = require("./fetch.js");
 
+process.on("unhandledRejection", (reason, promise) => {
+	console.error("An unhandled rejection occurred: ", reason.message || reason);
+});
+
 let auth = false;
 
 let name = "LT PETERSON E";
