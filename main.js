@@ -99,7 +99,8 @@ async function runDate(date) {
 			//console.log(sked.flights.list);
 			sked.flights.list.forEach((event) => {
 				let details = {};
-				if(event.instructor && event.instructor.indexOf(name) !== -1) {
+				if(event.instructor && event.instructor.indexOf(name) !== -1) { //there is an instructor and it is me
+					console.log(event);
 					//console.log("brief:"+event.brief);
 					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
 					if(event.brief === null) event.brief = new Date(formatDate+"T00:00:00"+tz);
@@ -111,13 +112,13 @@ async function runDate(date) {
 						summary: event.event.join(", "),
 						start: event.brief,
 						end: event.land,
-						description: event.notes,
+						description: event.student.join(", ")+(event.notes === null ? "" : "\n"+event.notes),
 					};
 					console.log("add event:");
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[0] && event.student[0].indexOf(name) !== -1) {
+				else if(event.student[0] && event.student[0].indexOf(name) !== -1) { //there is an student 0 and it is me
 					details = {
 						summary: event.event[0],
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -128,7 +129,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[1] && event.student[1].indexOf(name) !== -1) {
+				else if(event.student[1] && event.student[1].indexOf(name) !== -1) { //there is an student 1 and it is me
 					details = {
 						summary: event.event[1],
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -139,7 +140,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[2] && event.student[2].indexOf(name) !== -1) {
+				else if(event.student[2] && event.student[2].indexOf(name) !== -1) { //there is an student 2 and it is me
 					details = {
 						summary: event.event[2],
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
