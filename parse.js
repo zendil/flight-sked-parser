@@ -98,7 +98,7 @@ function parseSims(item, sims) {
 			sims.headers.student.startx = item.x;
 			break;
 		case "TYPE":
-			sims.headers.event.startx = item.x;
+			sims.headers.event.startx = item.x - 0.015; //Extra tolerance because event is always slightly left of event header
 			break;
 		case "REMARKS":
 			sims.headers.notes.startx = item.x;
