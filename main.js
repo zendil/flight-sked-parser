@@ -167,13 +167,18 @@ async function runDate(date) {
 				let details = {};
 				if(event.instructor[0] && event.instructor[0].indexOf(name) !== -1) {
 					details = {
-						summary: event.event.join(", "),
+						summary: (event.event) ? event.event.join(", ") : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
 						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
-						description: event.notes,
+						description: (event.student ? event.student.join(", ") : "Unknown Student") + (event.notes === null ? "" : "\n"+event.notes),
+					};
+					console.log("add event:");
+					console.log(details);
+					addEvent(auth, details);
+				}
 				else if(event.instructor[1] && event.instructor[1].indexOf(name) !== -1) {
 					details = {
-						summary: (event.event) ? event.event.join(", ") : "Unkown Event",
+						summary: (event.event) ? event.event.join(", ") : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
 						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: (event.student ? event.student.join(", ") : "Unknown Student") + (event.notes === null ? "" : "\n"+event.notes),
@@ -185,7 +190,7 @@ async function runDate(date) {
 				else if(event.student[0] && event.student[0].indexOf(name) !== -1) {
 					//console.log(event);
 					details = {
-						summary: event.event[0],
+						summary: (event.event[0]) ? event.event[0] : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
 						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: "IP "+event.instructor+"\n"+event.notes,
@@ -196,7 +201,7 @@ async function runDate(date) {
 				}
 				else if(event.student[1] && event.student[1].indexOf(name) !== -1) {
 					details = {
-						summary: event.event[1],
+						summary: (event.event[1]) ? event.event[1] : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
 						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: "IP "+event.instructor+"\n"+event.notes,
