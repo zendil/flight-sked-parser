@@ -272,6 +272,7 @@ function parseFile(buffer) {
 					sims.list.forEach((e) => {
 						if(e.student) e.student = e.student.split("\n");
 						if(e.event) e.event = e.event.split("\n");
+						if(e.instructor) e.instructor = e.instructor.split("\n");
 					});
 					grounds.list.forEach((e) => {
 						let ret = e.time.matchAll(/(?<start>\d{4})-(?<end>\d{4})/g).next().value;

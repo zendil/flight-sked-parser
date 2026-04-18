@@ -165,12 +165,18 @@ async function runDate(date) {
 				if(!event.notes) event.notes = "";
 				if(event.brief == "TBD") event.brief = event.takeoff;
 				let details = {};
-				if(event.instructor && event.instructor.indexOf(name) !== -1) {
+				if(event.instructor[0] && event.instructor[0].indexOf(name) !== -1) {
 					details = {
 						summary: event.event.join(", "),
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
 						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
 						description: event.notes,
+				else if(event.instructor[1] && event.instructor[1].indexOf(name) !== -1) {
+					details = {
+						summary: (event.event) ? event.event.join(", ") : "Unkown Event",
+						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
+						end: new Date(new Date(formatDate+"T"+event.takeoff.substr(0,2)+":"+event.takeoff.substr(2,2)+":00"+tz).getTime() + event.duration * 60 * 60 * 1000),
+						description: (event.student ? event.student.join(", ") : "Unknown Student") + (event.notes === null ? "" : "\n"+event.notes),
 					};
 					console.log("add event:");
 					console.log(details);
