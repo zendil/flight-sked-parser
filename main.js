@@ -23,7 +23,7 @@ let fetched = {};
 //	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
 //}
 //let firstdate = firstday.getFullYear().toString().padStart(2, "0")+"-"+(firstday.getMonth()+1).toString().padStart(2, "0")+"-"+(firstday.getDate()+0).toString().padStart(2, "0");
-//firstdate = "2026-01-29";
+//firstdate = "2026-04-17";
 
 //runDate(new Date(firstdate+" 00:00:00"));
 runDate(new Date());
@@ -104,7 +104,7 @@ async function runDate(date) {
 			sked.flights.list.forEach((event) => {
 				let details = {};
 				if(event.instructor && event.instructor.indexOf(name) !== -1) { //there is an instructor and it is me
-					console.log(event);
+					//console.log(event);
 					//console.log("brief:"+event.brief);
 					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
 					if(event.brief === null) event.brief = new Date(formatDate+"T00:00:00"+tz);
