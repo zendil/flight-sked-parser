@@ -10,7 +10,11 @@ process.on("unhandledRejection", (reason, promise) => {
 
 let auth = false;
 
-let name = "LT PETERSON E";
+let name = [
+	"LT PETERSON E",
+	"LT PETERSON T",
+	"LTPETERSON T",
+];
 
 //LOCAL MACHINE TIME MUST BE IN TIME ZONE OF THE SCHEDULE (America/Chicago)
 let tzval, tz;
@@ -103,7 +107,7 @@ async function runDate(date) {
 			//console.log(sked.flights.list);
 			sked.flights.list.forEach((event) => {
 				let details = {};
-				if(event.instructor && event.instructor.indexOf(name) !== -1) { //there is an instructor and it is me
+				if(event.instructor && name.includes(event.instructor)) { //there is an instructor and it is me
 					//console.log(event);
 					//console.log("brief:"+event.brief);
 					if(event.event === null) event.event = ["Unknown"]; //If null set to unknown
@@ -122,7 +126,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[0] && event.student[0].indexOf(name) !== -1) { //there is an student 0 and it is me
+				else if(event.student[0] && name.includes(event.student[0])) { //there is an student 0 and it is me
 					details = {
 						summary: event.event[0],
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -133,7 +137,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[1] && event.student[1].indexOf(name) !== -1) { //there is an student 1 and it is me
+				else if(event.student[1] && name.includes(event.student[1])) { //there is an student 1 and it is me
 					details = {
 						summary: event.event[1],
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -144,7 +148,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[2] && event.student[2].indexOf(name) !== -1) { //there is an student 2 and it is me
+				else if(event.student[2] && name.includes(event.student[2])) { //there is an student 2 and it is me
 					details = {
 						summary: event.event[2],
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -165,7 +169,7 @@ async function runDate(date) {
 				if(!event.notes) event.notes = "";
 				if(event.brief == "TBD") event.brief = event.takeoff;
 				let details = {};
-				if(event.instructor[0] && event.instructor[0].indexOf(name) !== -1) {
+				if(Array.isArray(event.instructor) && event.instructor[0] && name.includes(event.instructor[0])) {
 					details = {
 						summary: (event.event) ? event.event.join(", ") : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -176,7 +180,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.instructor[1] && event.instructor[1].indexOf(name) !== -1) {
+				else if(Array.isArray(event.instructor) && event.instructor[1] && name.includes(event.instructor[1])) {
 					details = {
 						summary: (event.event) ? event.event.join(", ") : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -187,7 +191,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[0] && event.student[0].indexOf(name) !== -1) {
+				else if(Array.isArray(event.student) && event.student[0] && name.includes(event.student[0])) {
 					//console.log(event);
 					details = {
 						summary: (event.event[0]) ? event.event[0] : "Unknown Event",
@@ -199,7 +203,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student[1] && event.student[1].indexOf(name) !== -1) {
+				else if(Array.isArray(event.student) && event.student[1] && name.includes(event.student[1])) {
 					details = {
 						summary: (event.event[1]) ? event.event[1] : "Unknown Event",
 						start: new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz),
@@ -217,7 +221,7 @@ async function runDate(date) {
 				if(!event.instructor) event.instructor = "TBD";
 				if(!event.notes) event.notes = "";
 				let details = {};
-				if(event.instructor && event.instructor.indexOf(name) !== -1) {
+				if(event.instructor && name.includes(event.instructor)) {
 					details = {
 						summary: event.event,
 						start: new Date(formatDate+"T"+event.time.substr(0,2)+":"+event.time.substr(2,2)+":00"+tz),
@@ -228,7 +232,7 @@ async function runDate(date) {
 					console.log(details);
 					addEvent(auth, details);
 				}
-				else if(event.student && event.student.indexOf(name) !== -1) {
+				else if(event.student && name.includes(event.student)) {
 					//console.log(event);
 					details = {
 						summary: event.event,
