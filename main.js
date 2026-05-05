@@ -116,6 +116,7 @@ async function runDate(date) {
 					else event.brief = new Date(formatDate+"T"+event.brief.substr(0,2)+":"+event.brief.substr(2,2)+":00"+tz);
 					if(event.land === null) event.land = new Date(formatDate+"T23:59:59"+tz);
 					else event.land = new Date(formatDate+"T"+event.land.substr(0,2)+":"+event.land.substr(2,2)+":00"+tz);
+					if(event.land <= event.brief) event.land.setDate(event.land.getDate() + 1); //increment the day if the end time is after midnight
 					if(event.event === null) event.event = "None"; //If null set to none
 					details = {
 						summary: event.event.join(", "),
