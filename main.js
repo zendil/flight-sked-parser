@@ -27,7 +27,7 @@ let fetched = {};
 //	firstday = new Date(firstday.valueOf() + 24 * 60 * 60 * 1000);
 //}
 //let firstdate = firstday.getFullYear().toString().padStart(2, "0")+"-"+(firstday.getMonth()+1).toString().padStart(2, "0")+"-"+(firstday.getDate()+0).toString().padStart(2, "0");
-//firstdate = "2026-04-17";
+//firstdate = "2026-05-03";
 
 //runDate(new Date(firstdate+" 00:00:00"));
 runDate(new Date());
@@ -106,6 +106,7 @@ async function runDate(date) {
 		parseFile(checkedPDF).then((sked) => {
 			//console.log(sked.flights.list);
 			sked.flights.list.forEach((event) => {
+				//console.log(event);
 				let details = {};
 				if(event.instructor && name.includes(event.instructor)) { //there is an instructor and it is me
 					//console.log(event);
