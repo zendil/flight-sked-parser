@@ -11,6 +11,7 @@ FROM node:25-alpine
 # Use production node environment by default.
 ENV NODE_ENV=production
 ENV NODE_CREDENTIALS_PATH=/run/secrets/credentials
+ENV NODE_FLIGHT_SCHEDULE_CHECK_PORT=14364
 
 #WORKDIR /usr/src/app
 

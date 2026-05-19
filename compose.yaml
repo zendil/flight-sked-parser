@@ -13,13 +13,13 @@ services:
     environment:
       NODE_ENV: production
       TZ: America/Chicago
-    # ports:
-      # - 3000:3000
-    container_name: sked-parser
+      ports:
+      - ${NODE_FLIGHT_SCHEDULE_CHECK_PORT}:${NODE_FLIGHT_SCHEDULE_CHECK_PORT}
+    container_name: flight-sked-parser
     restart: unless-stopped
     # Because portainer doesn't do secrets...
     volumes:
-      - /opt/sked-parser/credentials.json:/run/secrets/credentials:ro
+      - /home/ted/node/credentials.json:/run/secrets/credentials:ro
     
 #    secrets:
 #      - credentials
