@@ -8,7 +8,7 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  sked-parser:
+  flight-sked-parser:
     image: zendil/flight-sked-parser:latest
     environment:
       NODE_ENV: production
