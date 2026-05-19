@@ -3,10 +3,13 @@ const childProcess = require('node:child_process');
 const parseFile = require("./parse.js");
 const addEvent = require("./calendar.js");
 const fetchSked = require("./fetch.js");
+const http = require("node:http");
 
 process.on("unhandledRejection", (reason, promise) => {
 	console.error("An unhandled rejection occurred: ", reason.message || reason);
 });
+
+const listen_port = process.env.NODE_FLIGHT_SCHEDULE_CHECK_PORT || 14364;
 
 let auth = false;
 
@@ -294,3 +297,49 @@ function qpdf(inbuffer) {
 		return inbuffer;
 	}
 }
+
+const server = http.createServer({}, (req, res) => {
+	if (req.method === 'POST') { //accept only a post request
+		body = "";
+		req.on("data", (chunk) => {
+			body += chunk; //build the post body by chunks
+		});
+		req.on("end", () => {
+			let parsed;
+			try { //if the post body doesnt parse to json, respond 400
+				parsed = JSON.parse(body);
+				if(!parsed.date) { //if date field not present, throw 400
+					console.log("Flight schedule check error: Date not present");
+					res.writeHead(400, { 'Content-Type': 'text/plain' });
+					res.end('Bad Request');
+				}
+				else {
+					date = new Date(parsed.date);
+					let formatDate = date.getFullYear().toString()+"-"+(date.getMonth()+1).toString().padStart(2, "0")+"-"+(date.getDate()+0).toString().padStart(2, "0"); //format the date per the array
+					res.writeHead(200, { 'Content-Type': 'application/json' });
+					resdata = {};
+					console.log("Check flight schedule date: "+formatDate);
+					if(fetched[formatDate]) {
+						resdata[formatDate] = true;
+					}
+					else {
+						resdata[formatDate] = false;
+					}
+					res.end(JSON.stringify(resdata)); //send response
+				}
+			}
+			catch (e) { //catch throw 400
+				console.log("Server response error: "+e);
+				res.writeHead(400, { 'Content-Type': 'text/plain' });
+				res.end('Bad Request');
+			}
+			
+		});
+	}
+	else { //400 to non-post
+		console.log("Flight schedule check error: non-post request");
+		res.writeHead(400, { 'Content-Type': 'text/plain' });
+		res.end('Bad Request');
+	}
+});
+server.listen(listen_port);
