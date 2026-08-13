@@ -2,10 +2,21 @@ module.exports = fetchSked;
 
 	const https = require("node:https");
 	const fs = require("node:fs");
+	const tls = require("node:tls");
 
 function fetchSked(date) {
 	return new Promise((resolve, reject) => {
 		//reject("fail");
+		
+		const defaultcas = tls.getCACertificates();
+		const certchain = fs.readFileSync("www-cnatra-navy-mil-chain.pem", {encoding: "utf8"});
+		let cas = [...defaultcas, certchain];
+		
+		const agentoptions = {
+			ca: cas,
+		};
+		const agent = new https.Agent(agentoptions);
+		
 		const urlprefix = "https://www.cnatra.navy.mil/scheds/";
 		const urlwing = "TW5";
 		const urlsquadron = "SQ-HT-8";
@@ -25,10 +36,14 @@ function fetchSked(date) {
 				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0"
 			}
 		};
+		
+		const requestoptions = {
+			agent: agent,
+		};
 
 		let data = Buffer.from([]);
 
-		const urlreq = https.request(urloptions, (res) => {
+		const urlreq = https.request({...urloptions, ...requestoptions}, (res) => {
 			res.on("data", (chunk) => {
 				if(res.statusCode == 200) {
 					data = Buffer.concat([data, chunk]);
@@ -45,7 +60,7 @@ function fetchSked(date) {
 			});
 		});
 		urlreq.on("error", (e) => {
-			console.error("problem with request: ${e.message}");
+			console.error("problem with request: "+e.message);
 			reject(e);
 		});
 
