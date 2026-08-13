@@ -9,7 +9,7 @@ function fetchSked(date) {
 		//reject("fail");
 		
 		const defaultcas = tls.getCACertificates();
-		const certchain = fs.readFileSync("www-cnatra-navy-mil-chain.pem", {encoding: "utf8"});
+		const certchain = fs.readFileSync("./www-cnatra-navy-mil-chain.pem", {encoding: "utf8"});
 		let cas = [...defaultcas, certchain];
 		
 		const agentoptions = {
