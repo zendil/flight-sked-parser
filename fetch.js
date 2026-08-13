@@ -2,6 +2,7 @@ module.exports = fetchSked;
 
 	const https = require("node:https");
 	const fs = require("node:fs");
+	const path = require("node:path");
 	const tls = require("node:tls");
 
 function fetchSked(date) {
@@ -9,7 +10,7 @@ function fetchSked(date) {
 		//reject("fail");
 		
 		const defaultcas = tls.getCACertificates();
-		const certchain = fs.readFileSync("./www-cnatra-navy-mil-chain.pem", {encoding: "utf8"});
+		const certchain = fs.readFileSync(path.join(__dirname, "www-cnatra-navy-mil-chain.pem"), {encoding: "utf8"});
 		let cas = [...defaultcas, certchain];
 		
 		const agentoptions = {
